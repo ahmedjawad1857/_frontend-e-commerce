@@ -1,3 +1,5 @@
+"use client";
+import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import {
   Flex,
   Link,
@@ -8,9 +10,13 @@ import {
   Box,
   Heading,
   Button,
+  useBoolean,
 } from "@chakra-ui/react";
+import { useState } from "react";
 
 export default function Navbar() {
+  const [isClicked, setIsClicked] = useBoolean();
+
   return (
     <Box
       h="300"
@@ -27,7 +33,10 @@ export default function Navbar() {
           <Link href="/">Home</Link>
           <Link href="/bedsheet">Bedsheets</Link>
           <Menu>
-            <MenuButton as={Link}>Clothing</MenuButton>
+            <MenuButton as={Link} onClick={setIsClicked.toggle}>
+              Clothing
+              {!isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />}{" "}
+            </MenuButton>
             <MenuList color={"black"}>
               <Link href="/clothing/menClothing">
                 <MenuItem>Men's Clothing </MenuItem>
@@ -38,7 +47,9 @@ export default function Navbar() {
             </MenuList>
           </Menu>
           <Menu>
-            <MenuButton as={Link}>Decoration</MenuButton>
+            <MenuButton onClick={setIsClicked.toggle} as={Link}>
+              Decoration {!isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />}{" "}
+            </MenuButton>
             <MenuList color={"black"}>
               <Link href="/decoration/homeDecor">
                 <MenuItem>Home Decor </MenuItem>
@@ -46,7 +57,8 @@ export default function Navbar() {
             </MenuList>
           </Menu>
           <Menu>
-            <MenuButton as={Link}>Religious Content</MenuButton>
+            <MenuButton onClick={setIsClicked.toggle} as={Link}>Religious Content               {!isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />}{" "}
+</MenuButton>
             <MenuList color={"black"}>
               <Link href="/religiousContent/namaz">
                 <MenuItem>Jai Namaz</MenuItem>

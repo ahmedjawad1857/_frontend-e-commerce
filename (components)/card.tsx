@@ -21,7 +21,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import UseProduct from "@/app/(custom-hooks)/useProduct";
 export default function Cards(props: any) {
-  const { productStyle, setHovered, ProductId,clickHandler } = UseProduct();
+  const { productStyle, setHovered, ProductId, } = UseProduct();
   return (
     <>
       
@@ -65,7 +65,6 @@ export default function Cards(props: any) {
           );
         })}
       </Grid>
-      <Button onClick={()=>clickHandler()}>click me</Button>
 
     </>
   );

@@ -188,9 +188,6 @@ export default function UseProduct() {
     //   setIsDisabled(true);
     // }
   };
-  const navigateToProductDetail = () => {
-    router.push("/productDetail");
-  };
 
   // useEffect(() => {
   //   if (shouldNavigate) {
@@ -198,32 +195,26 @@ export default function UseProduct() {
   //   }
   // }, [shouldNavigate]);
 
-  const ProductId = async (id?: any) => {
+  const ProductId = async (idd: any) => {
     try {
       const sendingId = await axios.post("http://localhost:8020/id", {
-        id: id,
+        id: idd,
       });
 
-      const newProduct = sendingId.data;
-      setProduct(newProduct);
-      console.log("newProduct", newProduct);
+      const id = sendingId.data;
+      setProduct(id);
+      console.log("id", id);
       console.log("sendingId", sendingId.data);
 
-      setQuantity(1); // Reset quantity when navigating to a new product
-      // navigateToProductDetail();
-      return newProduct;
+      setQuantity(1);
+      router.push("/productDetail", id);
     } catch (e) {
       console.log("getting id error", e);
     }
   };
   // console.log("product", product);
-  const clickHandler = () => {
-    console.log("product", product);
-    navigateToProductDetail();
-    return product
-  };
+
   return {
-    clickHandler,
     productStyle,
     isHovered,
     setHovered,
