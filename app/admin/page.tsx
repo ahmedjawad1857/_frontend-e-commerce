@@ -14,43 +14,67 @@ import {
   Textarea,
   Select,
 } from "@chakra-ui/react";
+ import { getDownloadURL, getStorage, ref ,uploadBytes } from "firebase/storage";
 
 import { useState } from "react";
 import axios from "axios";
+import storage from "../config/fbconfig";
 export default function Admin() {
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
-  const [image, setImage] = useState();
+  const [image, setImage] = useState<any>();
   const [quantity, setQuantity] = useState();
   const [price, setPrice] = useState();
   const [category, setCategory] = useState("");
+  // const [url,setUrl]=useState('')
+  const imagesRef = ref(storage, 'productImages');
+let url1=''
+
    const addProduct=async ()=>{
- try{ const addedProduct=axios.post('http://localhost:8020/',{
+ try{
+const productImageRef=  ref(storage,`productImage/${image.name}`)
+console.log('productImageRef',productImageRef);
+
+  const uploadedImage= await uploadBytes(productImageRef, image).then((snapshot) => {
+    console.log('Uploaded a blob or file!');
+  });
+  console.log('upladedImgae',uploadedImage);
+  
+  const urlForDownload= await  getDownloadURL(ref(storage, productImageRef))
+  .then((url) => {
+    console.log('url',url);
+    // setUrl(url)
+    url1=url
+  })
+  console.log('urlForDownload',urlForDownload);
+  // console.log('url outside',url);
+  console.log('url1',url1);
+  
+  const addedProduct=axios.post('http://localhost:8020/',{
      title:title,
      description:description,
-     image:image,
+     image:url1,
      quantity:quantity,
      price:price,
      category:category,
  })
+
  }catch(e){
 
     console.log('adding product error',e);
     
  }
+ 
 
 
  }
-// const logs=()=>{
-//     console.log('title:',title);
-//     console.log('image:',image);
-//     console.log('description:',description);
-//     console.log('quantity:',quantity);
-//     console.log('category:',category);
-//     console.log('price:',price);
-    
-// }
 
+
+ const log=()=>{
+  console.log('image',image);
+  
+ }
+// const spaceRef = ref(storage, 'images/space.jpg');
   return (
     <>
       <Box>
@@ -75,9 +99,10 @@ export default function Admin() {
 
           {/* <Input
             type="file"
-            onChange={(e) => setImage(e.target.files)}
+            onChange={(e) => setImage(e.target
+              .files)}
           /> */}
-          <Input type="text" placeholder="enter about your product image" onChange={(e)=>setImage(e.target.value)}/>
+          <Input type="file" onChange={(e)=>setImage(e.target.files[0])}/>
         </FormControl>
         <FormControl w="500px">
           <FormLabel>Category</FormLabel>
@@ -119,6 +144,11 @@ export default function Admin() {
         <Button onClick={()=>addProduct()} backgroundColor={' rgb(240, 175, 10)'} color="white">
 
         Add Product
+
+        </Button>
+        <Button onClick={()=>log()} backgroundColor={' rgb(240, 175, 10)'} color="white">
+
+        Image log
 
         </Button>
       </Box>
